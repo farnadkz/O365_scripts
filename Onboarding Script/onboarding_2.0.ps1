@@ -44,8 +44,10 @@ Update-MgUser -UserId $user_name -UsageLocation "CA"
 #Assign Groups to user based on $Groups list
 #Write-Host (get-Licenses "ENTERPRISEPACK")
 #Write-Host (get-Licenses "SPB")
-if ((get-Licenses "ENTERPRISEPACK") -gt 0) {
+if (((get-Licenses "ENTERPRISEPACK") -gt 0) -and ((get-Licenses "ATP_ENTERPRISE") -gt 0) -and ((get-Licenses "EMS") -gt 0)) {
     Write-Host "Found E3 Licenses, Adding to E3" -ForegroundColor Cyan
+    Write-Host (get-Licenses "ATP_ENTERPRISE") 
+    Write-Host (get-Licenses "EMS")
 
     foreach ($group in $Groups_E3) {
         $group_id = (Get-MgGroup -Filter "startsWith(DisplayName, '$group')").Id
