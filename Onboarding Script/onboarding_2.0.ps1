@@ -46,8 +46,6 @@ Update-MgUser -UserId $user_name -UsageLocation "CA"
 #Write-Host (get-Licenses "SPB")
 if (((get-Licenses "ENTERPRISEPACK") -gt 0) -and ((get-Licenses "ATP_ENTERPRISE") -gt 0) -and ((get-Licenses "EMS") -gt 0)) {
     Write-Host "Found E3 Licenses, Adding to E3" -ForegroundColor Cyan
-    Write-Host (get-Licenses "ATP_ENTERPRISE") 
-    Write-Host (get-Licenses "EMS")
 
     foreach ($group in $Groups_E3) {
         $group_id = (Get-MgGroup -Filter "startsWith(DisplayName, '$group')").Id
@@ -79,8 +77,8 @@ elseif ((get-Licenses "SPB") -gt 0) {
         $group_id = (Get-MgGroup -Filter "startsWith(DisplayName, '$group')").Id
         $group_members = Get-MgGroupMember -All -GroupId $group_id
         New-MgGroupMember -GroupId $group_id -DirectoryObjectId $user_Id
-        $check_group_member = $group_members | Where-Object { $_.Id -eq $user_Id }
-        if ($check_group_member) {
+        $check_group_member = $group_members | Where-Object { $_.id -eq $user_Id }
+        if ($check_group_member -ne '') {
             Write-Host "Added User to Group '$group'" -ForegroundColor Green
         }
         else {
